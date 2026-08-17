@@ -4,6 +4,40 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+html.dark body,
+.dark body {
+  @apply bg-gray-950 text-gray-50;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Maandishi yanayosomeka light + dark */
+@layer base {
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark h4 {
+    @apply text-white;
+  }
+
+  html.dark p,
+  html.dark span,
+  html.dark label,
+  html.dark li,
+  html.dark td,
+  html.dark th {
+    @apply text-gray-100;
+  }
+
+  /* muted text: si gray-400 dhaifu sana */
+  .text-muted {
+    @apply text-gray-600 dark:text-gray-300;
+  }
 }
 
 @layer components {
@@ -11,15 +45,39 @@ body {
     @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors
+      dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white;
   }
   .btn-danger {
     @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
   }
   .input-field {
-    @apply w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+      bg-white text-gray-900 placeholder:text-gray-400
+      dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400;
   }
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5;
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5 text-gray-900
+      dark:bg-gray-900 dark:border-gray-700 dark:text-gray-50;
+  }
+  /* Kadi / labels zinazosomeka */
+  .card-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+  .card-sub {
+    @apply text-sm text-gray-600 dark:text-gray-300;
+  }
+  .table-head {
+    @apply text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300;
+  }
+  .table-cell {
+    @apply text-sm text-gray-900 dark:text-gray-100;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+      bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100;
+  }
+  .link-nav {
+    @apply text-gray-700 hover:text-primary-600 dark:text-gray-200 dark:hover:text-primary-400;
   }
 }

@@ -7,6 +7,12 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const logout = () => {
+    localStorage.removeItem('wajasilimali_token');
+    localStorage.removeItem('wajasilimali_user');
+    setUser(null);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('wajasilimali_token');
     const savedUser = localStorage.getItem('wajasilimali_user');
@@ -18,8 +24,10 @@ export function AuthProvider({ children }) {
           setUser(res.data);
           localStorage.setItem('wajasilimali_user', JSON.stringify(res.data));
         })
-        .catch(() => {
-          logout();
+        .catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403) {
+            logout();
+          }
         })
         .finally(() => setLoading(false));
     } else {
@@ -41,17 +49,30 @@ export function AuthProvider({ children }) {
     return res.data;
   };
 
-  const logout = () => {
-    localStorage.removeItem('wajasilimali_token');
-    localStorage.removeItem('wajasilimali_user');
-    setUser(null);
-  };
+  const isAdmin =
+    user?.role === 'admin' || user?.role === 'Admin' || user?.is_superuser === true;
+  const isSuperAdmin = user?.is_superuser === true;
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        isAuthenticated: !!user,
+        isAdmin,
+        isSuperAdmin,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
+}
